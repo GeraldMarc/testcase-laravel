@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
+})->name('guest.index');
+
+Route::post('/', [UserController::class,'login'])
+->name('guest.login');
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/home', [UserController::class,'getList'])
+    ->name('user.index');
 });

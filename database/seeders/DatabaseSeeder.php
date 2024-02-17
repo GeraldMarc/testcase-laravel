@@ -6,6 +6,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Models\Company;
+use App\Models\Permission;
+use App\Models\RolePermission;
 use App\Models\User;
 
 class DatabaseSeeder extends Seeder
@@ -34,6 +36,18 @@ class DatabaseSeeder extends Seeder
         $role->name = 'Staff';
         $role->save();
 
+        $permission = new Permission();
+        $permission->name = 'VIEW_COMPANY_USERS';
+        $permission->save();
+
+        $permission = new Permission();
+        $permission->name = 'MANAGE_COMPANY_USERS';
+        $permission->save();
+
+        $permission = new Permission();
+        $permission->name = 'VIEW_ALL_SUPERVISORS';
+        $permission->save();
+
         $company = new Company();
         $company->name = 'PT.XYZ';
         $company->save();
@@ -46,60 +60,97 @@ class DatabaseSeeder extends Seeder
         $company->name = 'PT.XYZ2';
         $company->save();
 
-        $role_manager = Role::where('name','Manager')->first();
-        $role_supervisor = Role::where('name','Supervisor')->first();
-        $role_staff = Role::where('name','Staff')->first();
+        $role_manager_id = Role::where('name','Manager')->first()->id;
+        $role_supervisor_id = Role::where('name','Supervisor')->first()->id;
+        $role_staff_id = Role::where('name','Staff')->first()->id;
 
-        $company_xyz = Company::where('name','PT.XYZ')->first();
-        $company_xyz1 = Company::where('name','PT.XYZ1')->first();
-        $company_xyz2 = Company::where('name','PT.XYZ2')->first();
+        $permission_view_company_users_id = Permission::where('name','VIEW_COMPANY_USERS')->first()->id;
+        $permission_manage_company_users_id = Permission::where('name','MANAGE_COMPANY_USERS')->first()->id;
+        $permission_view_all_supervisors_id = Permission::where('name','VIEW_ALL_SUPERVISORS')->first()->id;
+        
+        //Manager
+        $role_permission = new RolePermission();
+        $role_permission->role_id = $role_manager_id;
+        $role_permission->permission_id = $permission_view_company_users_id;
+        $role_permission->save();
+
+        $role_permission = new RolePermission();
+        $role_permission->role_id = $role_manager_id;
+        $role_permission->permission_id = $permission_manage_company_users_id;
+        $role_permission->save();
+
+        $role_permission = new RolePermission();
+        $role_permission->role_id = $role_manager_id;
+        $role_permission->permission_id = $permission_view_all_supervisors_id;
+        $role_permission->save();
+
+        //Supervisor
+        $role_permission = new RolePermission();
+        $role_permission->role_id = $role_supervisor_id;
+        $role_permission->permission_id = $permission_view_company_users_id;
+        $role_permission->save();
+
+        $role_permission = new RolePermission();
+        $role_permission->role_id = $role_supervisor_id;
+        $role_permission->permission_id = $permission_manage_company_users_id;
+        $role_permission->save();
+
+        //Staff
+        $role_permission = new RolePermission();
+        $role_permission->role_id = $role_supervisor_id;
+        $role_permission->permission_id = $permission_view_company_users_id;
+        $role_permission->save();
+
+        $company_xyz_id = Company::where('name','PT.XYZ')->first()->id;
+        $company_xyz1_id = Company::where('name','PT.XYZ1')->first()->id;
+        $company_xyz2_id = Company::where('name','PT.XYZ2')->first()->id;
 
         //PT XYZ
         User::factory(2)->create([
-            'role_id' => $role_manager,
-            'company_id' => $company_xyz,
+            'role_id' => $role_manager_id,
+            'company_id' => $company_xyz_id,
         ]);
 
         User::factory(3)->create([
-            'role_id' => $role_supervisor,
-            'company_id' => $company_xyz,
+            'role_id' => $role_supervisor_id,
+            'company_id' => $company_xyz_id,
         ]);
 
         User::factory(10)->create([
-            'role_id' => $role_staff,
-            'company_id' => $company_xyz,
+            'role_id' => $role_staff_id,
+            'company_id' => $company_xyz_id,
         ]);
 
         //PT XYZ1
         User::factory(1)->create([
-            'role_id' => $role_manager,
-            'company_id' => $company_xyz1,
+            'role_id' => $role_manager_id,
+            'company_id' => $company_xyz1_id,
         ]);
 
         User::factory(2)->create([
-            'role_id' => $role_supervisor,
-            'company_id' => $company_xyz1,
+            'role_id' => $role_supervisor_id,
+            'company_id' => $company_xyz1_id,
         ]);
 
         User::factory(6)->create([
-            'role_id' => $role_staff,
-            'company_id' => $company_xyz1,
+            'role_id' => $role_staff_id,
+            'company_id' => $company_xyz1_id,
         ]);
 
         //PT XYZ2
         User::factory(1)->create([
-            'role_id' => $role_manager,
-            'company_id' => $company_xyz2,
+            'role_id' => $role_manager_id,
+            'company_id' => $company_xyz2_id,
         ]);
 
         User::factory(4)->create([
-            'role_id' => $role_supervisor,
-            'company_id' => $company_xyz2,
+            'role_id' => $role_supervisor_id,
+            'company_id' => $company_xyz2_id,
         ]);
 
         User::factory(8)->create([
-            'role_id' => $role_staff,
-            'company_id' => $company_xyz2,
+            'role_id' => $role_staff_id,
+            'company_id' => $company_xyz2_id,
         ]);
     }
 }

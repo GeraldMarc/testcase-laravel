@@ -14,6 +14,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'username',
         'password',
         'role_id',
         'company_id',
@@ -28,11 +29,16 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function getPermissions()
+    {
+        return $this->role->permissions->pluck('name')->toArray();
+    }
+
     public function company(){
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
     public function role(){
-        return $this->hasOne(Role::class, 'role_id', 'id');
+        return $this->hasOne(Role::class, 'id', 'role_id');
     }
 }

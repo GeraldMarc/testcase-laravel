@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Permission extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'permission_id',
     ];
 
     protected $hidden = [
@@ -20,13 +19,8 @@ class Role extends Model
     protected $casts = [
     ];
 
-    public function users()
+    public function roles()
 	{
-	  return $this->belongsToMany(User::class, 'role_id', 'id');
-    }
-
-    public function permissions()
-	{
-	  return $this->belongsToMany(Permission::class, 'role_permission', 'role_id');
+	  return $this->belongsToMany(Role::class, 'role_permission', 'permission_id');
     }
 }

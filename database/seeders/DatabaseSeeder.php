@@ -38,14 +38,17 @@ class DatabaseSeeder extends Seeder
 
         $permission = new Permission();
         $permission->name = 'VIEW_COMPANY_USERS';
+        $permission->definition = 'View company users';
         $permission->save();
 
         $permission = new Permission();
         $permission->name = 'MANAGE_COMPANY_USERS';
+        $permission->definition = 'Manage company users';
         $permission->save();
 
         $permission = new Permission();
         $permission->name = 'VIEW_ALL_SUPERVISORS';
+        $permission->definition = 'View all supervisors';
         $permission->save();
 
         $company = new Company();

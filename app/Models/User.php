@@ -21,6 +21,7 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
+        'username',
         'password',
         'remember_token',
     ];
@@ -29,8 +30,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function getPermissions()
-    {
+    public function getPermissions(){
         return $this->role->permissions->pluck('name')->toArray();
     }
 

@@ -6,24 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('role_permission', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->string('password');
             $table->bigInteger('role_id')->unsigned();
             $table->foreign('role_id')
             ->references('id')->on('roles')
             ->onDelete('cascade')
             ->onUpdate('cascade');
-            $table->bigInteger('company_id')->unsigned();
-            $table->foreign('company_id')
-            ->references('id')->on('companies')
+            $table->bigInteger('permission_id')->unsigned();
+            $table->foreign('permission_id')
+            ->references('id')->on('permissions')
             ->onDelete('cascade')
             ->onUpdate('cascade');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('role_permission');
     }
 };
